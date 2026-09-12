@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RENDRSTUDIO — 3D Artist & Animator</title>
+
+  <meta name="description" content="Selected 3D animation, CGI and motion design work.">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #070707;
+      color: #f4f4f0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :root {
+      --background: #070707;
+      --surface: #101010;
+      --text: #f4f4f0;
+      --muted: #888;
+      --line: rgba(255, 255, 255, .1);
+      --accent: #d9ff3f;
+      --max-width: 1200px;
+    }
+
+    .container {
+      width: min(var(--max-width),
+          calc(100% - 40px));
+
+      margin: auto;
+    }
+
+    /* NAV */
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+
+      z-index: 50;
+
+      background: rgba(7, 7, 7, .75);
+
+      border-bottom: 1px solid var(--line);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      height: 76px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -.05em;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .back {
+      color: #999;
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .back:hover {
+      color: white;
+    }
+
+    /* HEADER */
+
+    .page-header {
+      padding: 180px 0 100px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(60px,
+          11vw,
+          150px);
+
+      line-height: .85;
+
+      letter-spacing: -.08em;
+
+      margin-top: 25px;
+    }
+
+    .intro {
+      max-width: 600px;
+
+      color: #888;
+
+      font-size: 17px;
+
+      margin-top: 35px;
+    }
+
+    /* WORK GRID */
+
+    .work-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 50px 20px;
+
+      padding-bottom: 120px;
+    }
+
+    .work-item {
+      overflow: hidden;
+    }
+
+    .work-item.featured {
+      grid-column: span 2;
+    }
+
+    .work-video {
+      width: 100%;
+
+      aspect-ratio: 16 / 10;
+
+      object-fit: cover;
+
+      display: block;
+
+      background: #111;
+
+      border: 1px solid var(--line);
+    }
+
+    .work-info {
+      padding-top: 18px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .work-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .work-category {
+      color: #666;
+
+      font-size: 11px;
+
+      margin-top: 5px;
+    }
+
+    .work-year {
+      color: #666;
+
+      font-size: 11px;
+    }
+
+    /* CONTACT */
+
+    .contact {
+      padding: 100px 0;
+
+      background: var(--accent);
+
+      color: #080808;
+    }
+
+    .contact h2 {
+      font-size: clamp(45px,
+          7vw,
+          90px);
+
+      line-height: .9;
+
+      letter-spacing: -.06em;
+
+      margin-top: 20px;
+    }
+
+    .email {
+      display: inline-block;
+
+      margin-top: 35px;
+
+      font-size: clamp(25px,
+          4vw,
+          50px);
+
+      font-weight: 800;
+    }
+
+    /* MOBILE */
+
+    @media(max-width: 700px) {
+
+      .container {
+        width:
+          calc(100% - 28px);
+      }
+
+      .page-header {
+        padding-top: 140px;
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-item.featured {
+        grid-column: span 1;
+      }
+
+    }
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- NAV -->
+
+  <nav>
+
+    <div class="container nav-inner">
+
+      <!-- <a href="index.html" class="logo">
+        YOUR<span>/3D</span>
+      </a> -->
+
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" height="50" alt="RendrStudio Logo">
+      </a>
+
+      <a href="index.html#work" class="back">
+        ← Back to home
+      </a>
+
+    </div>
+
+  </nav>
+
+
+
+  <!-- HEADER -->
+
+  <header class="page-header">
+
+    <div class="container">
+
+      <div class="eyebrow">
+        01 / Selected Work
+      </div>
+
+      <h1>
+        My work.
+      </h1>
+
+      <p class="intro">
+        A collection of 3D animation, CGI,
+        motion design and visual experiments.
+      </p>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- WORK -->
+
+  <main>
+
+    <div class="container">
+
+      <div class="work-grid">
+
+
+        <!-- VIDEO 01 -->
+
+        <article class="work-item featured">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-01.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+            <div>
+              <div class="work-title">
+                Product Animation
+              </div>
+
+              <div class="work-category">
+                3D Animation · Product Visualization
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- VIDEO 02 -->
+        <article class="work-item">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-02.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+
+            <div>
+
+              <div class="work-title">
+                Luxury Object
+              </div>
+
+              <div class="work-category">
+                CGI · Art Direction
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+        </article>
+
+        <!-- VIDEO 03 -->
+        <article class="work-item">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-03.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+
+            <div>
+
+              <div class="work-title">
+                Abstract Motion
+              </div>
+
+              <div class="work-category">
+                Motion Design · Simulation
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- VIDEO 04 -->
+        <article class="work-item">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-04.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+
+            <div>
+
+              <div class="work-title">
+                Architectural Visual
+              </div>
+
+              <div class="work-category">
+                Archviz · Rendering
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- VIDEO 05 -->
+        <article class="work-item">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-05.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+
+            <div>
+
+              <div class="work-title">
+                Architectural Visual
+              </div>
+
+              <div class="work-category">
+                Archviz · Rendering
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- VIDEO 06 -->
+        <article class="work-item">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-06.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+
+            <div>
+
+              <div class="work-title">
+                Luxury Object
+              </div>
+
+              <div class="work-category">
+                CGI · Art Direction
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+        </article>
+
+        <!-- VIDEO 07 -->
+        <article class="work-item">
+
+          <video class="work-video" autoplay muted loop playsinline controls preload="metadata">
+
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-07.mp4" type="video/mp4">
+
+          </video>
+
+          <div class="work-info">
+
+            <div>
+
+              <div class="work-title">
+                Abstract Motion
+              </div>
+
+              <div class="work-category">
+                Motion Design · Simulation
+              </div>
+
+            </div>
+
+            <div class="work-year">
+              2026
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- CONTACT -->
+
+  <section class="contact">
+
+    <div class="container">
+
+      <div class="eyebrow">
+        Let's work together
+      </div>
+
+      <h2>
+        Have an idea?<br>
+        Let's make it move.
+      </h2>
+
+      <a class="email" href="mailto:rendrstudio.my@gmail.com">
+
+        rendrstudio.my@gmail.com ↗
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+</body>
+
+</html>

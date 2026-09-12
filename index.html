@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RENDRSTUDIO — 3D Artist & Animator</title>
+
+  <meta name="description" content="Freelance 3D Artist, Animator and Motion Designer.">
+
+  <style>
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #070707;
+      color: #f4f4f0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    img,
+    video {
+      width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+
+    /* =========================================================
+       VARIABLES
+    ========================================================= */
+
+    :root {
+      --background: #070707;
+      --surface: #101010;
+      --surface-light: #171717;
+
+      --text: #f4f4f0;
+      --muted: #929292;
+
+      --line: rgba(255, 255, 255, 0.10);
+
+      --accent: #eaff59;
+
+      --max-width: 1200px;
+    }
+
+
+    /* =========================================================
+       GLOBAL
+    ========================================================= */
+
+    .container {
+      width: min(var(--max-width),
+          calc(100% - 40px));
+
+      margin: auto;
+    }
+
+    .section {
+      padding: 120px 0;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    h1,
+    h2,
+    h3,
+    .logo {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h2 {
+      font-size: clamp(45px, 6vw, 80px);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+    }
+
+
+    /* =========================================================
+       BACKGROUND NOISE
+    ========================================================= */
+
+    .noise {
+      position: fixed;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      z-index: 100;
+
+      opacity: 0.035;
+
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.7'/%3E%3C/svg%3E");
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+    ========================================================= */
+
+    nav {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      z-index: 50;
+
+      background: rgba(7, 7, 7, 0.75);
+
+      border-bottom: 1px solid var(--line);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      height: 76px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+
+      letter-spacing: -0.05em;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+
+      color: #aaa;
+
+      font-size: 13px;
+    }
+
+    .nav-links a {
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .nav-button {
+      padding: 10px 17px;
+
+      border: 1px solid white;
+
+      border-radius: 999px;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      transition: 0.25s;
+    }
+
+    .nav-button:hover {
+      background: white;
+      color: black;
+    }
+
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+      min-height: 100vh;
+
+      display: flex;
+
+      align-items: center;
+
+      position: relative;
+
+      overflow: hidden;
+
+      padding-top: 100px;
+    }
+
+    .hero-grid {
+      position: absolute;
+
+      inset: 0;
+
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+
+      background-size: 80px 80px;
+
+      mask-image:
+        linear-gradient(to bottom,
+          black,
+          transparent 90%);
+
+      opacity: 0.25;
+    }
+
+    .orb {
+      position: absolute;
+
+      width: 650px;
+      height: 650px;
+
+      right: -250px;
+      top: 10%;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(circle at 35% 35%,
+          #eaff59 0%,
+          #67771d 15%,
+          #22270e 40%,
+          transparent 70%);
+
+      opacity: 0.45;
+
+      filter: blur(2px);
+
+      animation: floatingOrb 8s ease-in-out infinite;
+    }
+
+    @keyframes floatingOrb {
+
+      50% {
+        transform:
+          translate(-25px, 25px) scale(1.05);
+      }
+
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 950px;
+    }
+
+    .hero h1 {
+      font-size: clamp(65px,
+          11vw,
+          155px);
+
+      line-height: 0.82;
+
+      letter-spacing: -0.08em;
+
+      margin: 25px 0 35px;
+    }
+
+    .hero h1 span {
+      color: transparent;
+
+      -webkit-text-stroke:
+        1px #9742ea;
+    }
+
+    .hero-description {
+      max-width: 600px;
+
+      color: #999;
+
+      font-size: 17px;
+    }
+
+    .hero-buttons {
+      display: flex;
+
+      gap: 14px;
+
+      margin-top: 35px;
+
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding: 15px 21px;
+
+      border-radius: 999px;
+
+      border: 1px solid var(--line);
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+      transition: 0.25s;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+    }
+
+    .button-primary {
+      background: var(--accent);
+
+      color: #050505;
+
+      border-color: var(--accent);
+    }
+
+    .scroll-text {
+      position: absolute;
+
+      bottom: 35px;
+
+      left: 0;
+
+      color: #666;
+
+      font-size: 10px;
+
+      letter-spacing: 0.18em;
+
+      text-transform: uppercase;
+    }
+
+
+    /* =========================================================
+       SECTION HEADER
+    ========================================================= */
+
+    .section-header {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: end;
+
+      gap: 30px;
+
+      margin-bottom: 50px;
+    }
+
+    .section-header p {
+      max-width: 300px;
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       SHOWREEL
+    ========================================================= */
+
+    .showreel {
+      position: relative;
+
+      aspect-ratio: 16 / 8;
+
+      min-height: 400px;
+
+      overflow: hidden;
+
+      background: #111;
+
+      border: 1px solid var(--line);
+    }
+
+    .showreel-placeholder {
+      width: 100%;
+      height: 100%;
+
+      display: grid;
+
+      place-items: center;
+
+      background:
+        radial-gradient(circle at 25% 40%,
+          rgba(217, 255, 63, 0.25),
+          transparent 28%),
+
+        radial-gradient(circle at 75% 55%,
+          rgba(255, 255, 255, 0.08),
+          transparent 30%),
+
+        linear-gradient(135deg,
+          #151515,
+          #050505);
+    }
+
+    .play-button {
+      width: 90px;
+      height: 90px;
+
+      border-radius: 50%;
+
+      border: 1px solid rgba(255, 255, 255, 0.4);
+
+      display: grid;
+
+      place-items: center;
+
+      background: rgba(0, 0, 0, 0.3);
+
+      font-size: 20px;
+    }
+
+    .media-label {
+      position: absolute;
+
+      bottom: 18px;
+      left: 20px;
+
+      color: #999;
+
+      font-size: 10px;
+
+      letter-spacing: 0.15em;
+    }
+
+
+    /* =========================================================
+       PORTFOLIO
+    ========================================================= */
+
+    .portfolio-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(12, 1fr);
+
+      gap: 18px;
+    }
+
+    .project {
+      grid-column: span 6;
+
+      background: var(--surface);
+
+      border: 1px solid var(--line);
+
+      overflow: hidden;
+
+      cursor: pointer;
+    }
+
+    .project:nth-child(3) {
+      grid-column: span 7;
+    }
+
+    .project:nth-child(4) {
+      grid-column: span 5;
+    }
+
+    .project-image {
+      position: relative;
+
+      aspect-ratio: 4 / 3;
+
+      overflow: hidden;
+    }
+
+    .project-image video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(.2, .7, 0, 1);
+    }
+
+    .project:hover .project-image video {
+      transform: scale(1.06);
+    }
+
+    .art {
+      position: absolute;
+
+      inset: 0;
+
+      transition:
+        transform 0.6s cubic-bezier(.2, .7, 0, 1);
+    }
+
+    .project:hover .art {
+      transform: scale(1.06);
+    }
+
+    .project-info {
+      padding: 20px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .project-title {
+      font-size: 16px;
+
+      font-weight: 700;
+    }
+
+    .project-category {
+      color: #777;
+
+      font-size: 11px;
+
+      margin-top: 5px;
+    }
+
+    .project-arrow {
+      color: var(--accent);
+
+      font-size: 20px;
+    }
+
+
+    /* =========================================================
+       SERVICES
+    ========================================================= */
+
+    .services {
+      border-top: 1px solid var(--line);
+    }
+
+    .service {
+      display: grid;
+
+      grid-template-columns:
+        70px 1fr 1.2fr auto;
+
+      gap: 25px;
+
+      align-items: center;
+
+      padding: 30px 0;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .service-number {
+      color: #555;
+
+      font-size: 12px;
+    }
+
+    .service h3 {
+      font-size: 26px;
+    }
+
+    .service-description {
+      color: #777;
+
+      max-width: 500px;
+
+      font-size: 13px;
+    }
+
+    .service-arrow {
+      color: var(--accent);
+
+      font-size: 20px;
+    }
+
+
+    /* =========================================================
+       ABOUT
+    ========================================================= */
+
+    .about-grid {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 80px;
+
+      align-items: center;
+    }
+
+    .about-image {
+      aspect-ratio: 1;
+
+      display: grid;
+
+      place-items: center;
+
+      border: 1px solid var(--line);
+
+      background:
+        radial-gradient(circle at 50% 35%,
+          rgba(217, 255, 63, 0.35),
+          transparent 20%),
+
+        radial-gradient(circle at 50% 55%,
+          #272d11,
+          transparent 45%),
+
+        #101010;
+    }
+
+    .about-monogram {
+      font-size: 150px;
+
+      font-weight: 800;
+
+      color: transparent;
+
+      -webkit-text-stroke:
+        1px rgba(255, 255, 255, 0.5);
+    }
+
+    .about-text p {
+      color: #999;
+
+      font-size: 16px;
+
+      margin-top: 25px;
+    }
+
+    .facts {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 1px;
+
+      background: var(--line);
+
+      margin-top: 35px;
+    }
+
+    .fact {
+      background: var(--background);
+
+      padding: 20px;
+    }
+
+    .fact strong {
+      display: block;
+
+      font-size: 30px;
+    }
+
+    .fact span {
+      display: block;
+
+      color: #777;
+
+      font-size: 11px;
+
+      margin-top: 4px;
+    }
+
+
+    /* =========================================================
+       PROCESS
+    ========================================================= */
+
+    .process-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 1px;
+
+      background: var(--line);
+    }
+
+    .process {
+      min-height: 230px;
+
+      padding: 30px;
+
+      background: var(--background);
+    }
+
+    .process-number {
+      color: var(--accent);
+
+      font-size: 11px;
+
+      font-weight: 700;
+    }
+
+    .process h3 {
+      margin-top: 50px;
+
+      font-size: 22px;
+    }
+
+    .process p {
+      margin-top: 12px;
+
+      color: #777;
+
+      font-size: 13px;
+    }
+
+
+    /* =========================================================
+       TESTIMONIAL
+    ========================================================= */
+
+    .quote {
+      max-width: 950px;
+
+      font-size: clamp(30px,
+          4vw,
+          58px);
+
+      line-height: 1.05;
+
+      letter-spacing: -0.04em;
+
+      margin-top: 25px;
+    }
+
+    .quote-mark {
+      color: var(--accent);
+    }
+
+    .quote-author {
+      margin-top: 30px;
+
+      color: #777;
+
+      font-size: 11px;
+
+      letter-spacing: 0.1em;
+    }
+
+
+    /* =========================================================
+       CONTACT
+    ========================================================= */
+
+    .contact {
+      padding: 110px 0;
+
+      background: var(--accent);
+
+      color: #080808;
+    }
+
+    .contact h2 {
+      max-width: 850px;
+
+      margin-top: 20px;
+    }
+
+    .contact-row {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: end;
+
+      gap: 30px;
+
+      margin-top: 50px;
+    }
+
+    .email {
+      font-size: clamp(25px,
+          4vw,
+          55px);
+
+      font-weight: 800;
+
+      letter-spacing: -0.04em;
+    }
+
+    .contact-note {
+      margin-top: 8px;
+
+      opacity: 0.65;
+
+      font-size: 13px;
+    }
+
+    .contact .button {
+      border-color: #080808;
+    }
+
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    footer {
+      padding: 28px 0;
+
+      color: #666;
+
+      font-size: 11px;
+    }
+
+    .footer-row {
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .socials {
+      display: flex;
+
+      gap: 20px;
+    }
+
+    .socials a:hover {
+      color: white;
+    }
+
+
+    /* =========================================================
+       PROJECT MODAL
+    ========================================================= */
+
+    .modal {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 80;
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 20px;
+
+      background:
+        rgba(0, 0, 0, 0.88);
+
+      backdrop-filter: blur(15px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(900px,
+          100%);
+
+      position: relative;
+
+      background: #111;
+
+      border: 1px solid var(--line);
+
+      padding: 30px;
+    }
+
+    .modal-close {
+      position: absolute;
+
+      top: 15px;
+      right: 18px;
+
+      background: none;
+
+      border: none;
+
+      color: white;
+
+      font-size: 30px;
+
+      cursor: pointer;
+    }
+
+    .modal-title {
+      font-size: 50px;
+
+      margin-top: 10px;
+    }
+
+    .modal-media {
+      aspect-ratio: 16 / 9;
+
+      display: grid;
+
+      place-items: center;
+
+      margin: 25px 0;
+
+      color: #666;
+
+      background: #080808;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media(max-width: 800px) {
+
+      .container {
+        width:
+          min(calc(100% - 28px),
+            var(--max-width));
+      }
+
+      .section {
+        padding: 80px 0;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size:
+          clamp(65px,
+            18vw,
+            120px);
+      }
+
+      .orb {
+        width: 450px;
+        height: 450px;
+
+        right: -250px;
+      }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-header p {
+        margin-top: 20px;
+      }
+
+      .showreel {
+        min-height: 260px;
+      }
+
+      .project,
+      .project:nth-child(3),
+      .project:nth-child(4) {
+        grid-column: span 12;
+      }
+
+      .service {
+        grid-template-columns:
+          40px 1fr auto;
+      }
+
+      .service-description {
+        grid-column: 2 / -1;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+      }
+
+      .process-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .contact-row {
+        display: block;
+      }
+
+      .contact .button {
+        margin-top: 30px;
+      }
+
+    }
+
+
+    @media(max-width: 500px) {
+
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 90vh;
+      }
+
+      .facts {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-row {
+        flex-direction: column;
+      }
+
+    }
+
+    .portfolio-more {
+      display: flex;
+      justify-content: center;
+      margin-top: 45px;
+    }
+
+    .modal-media {
+      width: 100%;
+      margin: 30px 0;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .modal-media video {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 70vh;
+      object-fit: contain;
+    }
+
+    /* =========================================================
+   IMAGE GALLERY CAROUSEL
+========================================================= */
+
+    .image-carousel {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-carousel-track {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      padding-bottom: 10px;
+    }
+
+    .image-carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .image-carousel-item {
+      flex: 0 0 225px;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .image-carousel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-carousel-item img {
+      transition: transform 0.6s cubic-bezier(.2, .7, 0, 1);
+    }
+
+    .image-carousel-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .image-carousel-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .image-carousel-button {
+      width: 48px;
+      height: 48px;
+
+      border: 1px solid var(--line);
+      border-radius: 50%;
+
+      background: var(--surface);
+
+      color: white;
+
+      cursor: pointer;
+
+      display: grid;
+      place-items: center;
+
+      font-size: 18px;
+
+      transition: 0.25s;
+    }
+
+    .image-carousel-button:hover {
+      background: white;
+      color: black;
+    }
+
+
+    /* MOBILE */
+
+    @media(max-width: 800px) {
+
+      .image-carousel-item {
+        flex: 0 0 75vw;
+      }
+
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- Background noise -->
+  <div class="noise"></div>
+
+
+  <!-- =======================================================
+       NAVIGATION
+  ======================================================== -->
+
+  <nav>
+
+    <div class="container nav-inner">
+
+      <!-- CHANGE YOUR NAME HERE -->
+      <!-- <a href="#home" class="logo">
+        RENDRSTUDIO<span>/3D</span>
+      </a> -->
+      <a href="#home" class="logo">
+        <img src="images/logo.png" height="50" alt="Your Name">
+      </a>
+
+      <div class="nav-links">
+
+        <a href="#services">
+          Services
+        </a>
+        <a href="#portfolio">
+          Portfolio
+        </a>
+        <a href="#work">
+          Work
+        </a>
+        <a href="#contact">
+          Contact
+        </a>
+
+      </div>
+
+      <a href="#contact" class="nav-button">
+        Let's work
+      </a>
+
+    </div>
+
+  </nav>
+
+
+  <main>
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero" id="home">
+
+      <div class="hero-grid"></div>
+
+      <div class="orb"></div>
+
+      <div class="container">
+
+        <div class="hero-content">
+
+          <div class="eyebrow">
+            Rendering the Future, One Frame at a Time
+          </div>
+
+          <h1>
+            Create<br>
+            <span>beyond limits.</span>
+          </h1>
+
+          <p class="hero-description">
+
+            Founded in 2020, Rendr Studio is a creative agency specializing in graphic design, motion graphics, 3D
+            rendering, and video editing. With a focus on delivering innovative and high-quality solutions, we cater to
+            a diverse range of clients across multiple industries.
+
+          </p>
+
+          <div class="hero-buttons">
+
+            <a href="#work" class="button button-primary">
+              Explore my work ↗
+            </a>
+
+            <a href="#contact" class="button">
+              Start a project
+            </a>
+
+          </div>
+
+        </div>
+
+        <div class="scroll-text">
+          ↓ Scroll to explore
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         SHOWREEL
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div>
+
+            <div class="eyebrow">
+              01 / Showreel
+            </div>
+
+            <h2>
+              Selected motion.
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="showreel">
+
+          <video id="showreelVideo" autoplay muted loop playsinline preload="metadata">
+            <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/showreel.mp4" type="video/mp4">
+          </video>
+          <div class="media-label">
+            SHOWREEL / 2026
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         SERVICES
+    ====================================================== -->
+
+    <section class="section services" id="services">
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div>
+
+            <div class="eyebrow">
+              02 / Services
+            </div>
+
+            <h2>
+              What we do.
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="service">
+
+          <div class="service-number">
+            01
+          </div>
+
+          <h3>
+            3D design
+          </h3>
+
+          <p class="service-description">
+            Creating detailed and realistic 3D models, products, environments, and visual concepts that bring ideas to
+            life.
+          </p>
+
+          <div class="service-arrow">
+            ↗
+          </div>
+
+        </div>
+
+
+        <div class="service">
+
+          <div class="service-number">
+            02
+          </div>
+
+          <h3>
+            Motion Graphic
+          </h3>
+
+          <p class="service-description">
+            Designing engaging animated graphics and visual effects for advertisements, social media, presentations, and
+            brands.
+          </p>
+
+          <div class="service-arrow">
+            ↗
+          </div>
+
+        </div>
+
+
+        <div class="service">
+
+          <div class="service-number">
+            03
+          </div>
+
+          <h3>
+            Animation
+          </h3>
+
+          <p class="service-description">
+            Bringing characters, objects, and concepts to life through creative and smooth 2D or 3D animation.
+          </p>
+
+          <div class="service-arrow">
+            ↗
+          </div>
+
+        </div>
+
+
+        <div class="service">
+
+          <div class="service-number">
+            04
+          </div>
+
+          <h3>
+            Graphic Design
+          </h3>
+
+          <p class="service-description">
+            Creating eye-catching logos, branding, social media graphics, posters, and other visual materials.
+          </p>
+
+          <div class="service-arrow">
+            ↗
+          </div>
+
+        </div>
+
+        <div class="service">
+
+          <div class="service-number">
+            05
+          </div>
+
+          <h3>
+            Video Production
+          </h3>
+
+          <p class="service-description">
+            Producing professional and engaging videos, from concept and editing to motion graphics and final delivery.
+          </p>
+
+          <div class="service-arrow">
+            ↗
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+     PORTFOLIO
+====================================================== -->
+
+    <section class="section portfolio" id="portfolio">
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div>
+
+            <div class="eyebrow">
+              03 / Portfolio
+            </div>
+
+            <h2>
+              Our portfolio.
+            </h2>
+
+          </div>
+
+          <p class="muted">
+            Selected 3D renders, artwork
+            and visual creations.
+          </p>
+
+        </div>
+
+
+        <div class="image-carousel">
+
+          <div class="image-carousel-track" id="imageCarousel">
+
+
+            <!-- IMAGE 01 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-01.png" alt="3D artwork 01">
+
+            </div>
+
+
+            <!-- IMAGE 02 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-02.png" alt="3D artwork 02">
+
+            </div>
+
+
+            <!-- IMAGE 03 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-03.png" alt="3D artwork 03">
+
+            </div>
+
+
+            <!-- IMAGE 04 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-04.png" alt="3D artwork 04">
+
+            </div>
+
+
+            <!-- IMAGE 05 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-05.png" alt="3D artwork 05">
+
+            </div>
+
+
+            <!-- IMAGE 06 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-06.png" alt="3D artwork 06">
+
+            </div>
+
+            <!-- IMAGE 07 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-07.png" alt="3D artwork 07">
+
+            </div>
+
+            <!-- IMAGE 08 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-08.png" alt="3D artwork 08">
+
+            </div>
+
+
+            <!-- IMAGE 09 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-09.png" alt="3D artwork 09">
+
+            </div>
+
+
+            <!-- IMAGE 10 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-10.png" alt="3D artwork 10">
+
+            </div>
+
+
+            <!-- IMAGE 11 -->
+
+            <div class="image-carousel-item">
+
+              <img src="images/gallery-11.png" alt="3D artwork 11">
+
+            </div>
+
+
+          </div>
+
+
+          <div class="image-carousel-buttons">
+
+            <button class="image-carousel-button" id="imagePrev">
+              ←
+            </button>
+
+            <button class="image-carousel-button" id="imageNext">
+              →
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORK
+    ====================================================== -->
+
+    <section class="section" id="work">
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div>
+
+            <div class="eyebrow">
+              04 / Work
+            </div>
+
+            <h2>
+              Our work.
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="portfolio-grid">
+
+
+          <!-- PROJECT 01 -->
+          <article class="project" data-title="Product Animation"
+            data-description="A cinematic product animation project." data-video="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-01.mp4">
+
+            <div class="project-image">
+              <video autoplay muted loop playsinline preload="metadata">
+                <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-01.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-info">
+              <div>
+                <div class="project-title">Product Animation</div>
+
+                <div class="project-category">
+                  3D Animation · Product Visualization
+                </div>
+              </div>
+
+              <div class="project-arrow">↗</div>
+            </div>
+
+          </article>
+
+
+          <!-- PROJECT 02 -->
+          <article class="project" data-title="Luxury Object"
+            data-description="High-end CGI visualization for a premium product.">
+
+            <div class="project-image">
+              <video autoplay muted loop playsinline preload="metadata">
+                <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-02.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-info">
+              <div>
+                <div class="project-title">Luxury Object</div>
+                <div class="project-category">
+                  CGI · Art Direction
+                </div>
+              </div>
+
+              <div class="project-arrow">↗</div>
+            </div>
+
+          </article>
+
+
+          <!-- PROJECT 03 -->
+          <article class="project" data-title="Abstract Motion"
+            data-description="Abstract 3D motion design and simulation.">
+
+            <div class="project-image">
+              <video autoplay muted loop playsinline preload="metadata">
+                <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-03.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-info">
+              <div>
+                <div class="project-title">Abstract Motion</div>
+                <div class="project-category">
+                  Motion Design · Simulation
+                </div>
+              </div>
+
+              <div class="project-arrow">↗</div>
+            </div>
+
+          </article>
+
+
+          <!-- PROJECT 04 -->
+          <article class="project" data-title="Architectural Visual"
+            data-description="Architectural visualization and cinematic rendering.">
+
+            <div class="project-image">
+              <video autoplay muted loop playsinline preload="metadata">
+                <source src="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-04.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-info">
+              <div>
+                <div class="project-title">Architectural Visual</div>
+                <div class="project-category">
+                  Archviz · Rendering
+                </div>
+              </div>
+
+              <div class="project-arrow">↗</div>
+            </div>
+
+          </article>
+
+
+        </div>
+        <div class="portfolio-more">
+
+          <a href="work.html" class="button button-primary">
+            View all work ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         WHY CHOOSE US
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div>
+
+            <div class="eyebrow">
+              05 / Why
+            </div>
+
+            <h2>
+              Why choose us ?
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="process-grid">
+
+
+          <div class="process">
+
+            <div class="process-number">
+              01
+            </div>
+
+            <h3>
+              Creative & Innovative
+            </h3>
+
+            <p>
+              We craft unique visuals that stand out.
+            </p>
+
+          </div>
+
+
+          <div class="process">
+
+            <div class="process-number">
+              02
+            </div>
+
+            <h3>
+              High-Quality Output
+            </h3>
+
+            <p>
+              We prioritize professional and polished results.
+            </p>
+
+          </div>
+
+
+          <div class="process">
+
+            <div class="process-number">
+              03
+            </div>
+
+            <h3>
+              Experienced Team
+            </h3>
+
+            <p>
+              Experts in 3D, animation, and video production.
+            </p>
+
+          </div>
+
+
+          <div class="process">
+
+            <div class="process-number">
+              04
+            </div>
+
+            <h3>
+              Client-Focused Approach
+            </h3>
+
+            <p>
+              We work closely with our clients to bring their vision to life.
+            </p>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTACT
+    ====================================================== -->
+
+    <section class="contact" id="contact">
+
+      <div class="container">
+
+        <div class="eyebrow" style="color:#080808;">
+          06 / Contact
+        </div>
+
+        <h2>
+          Have an idea?<br>
+          Let's make it move.
+        </h2>
+
+
+        <div class="contact-row">
+
+          <div>
+
+            <!-- CHANGE YOUR EMAIL HERE -->
+
+            <div class="email">
+              rendrstudio.my@gmail.com
+            </div>
+
+            <div class="contact-note">
+              Available for freelance projects
+              & collaborations.
+            </div>
+
+          </div>
+
+
+          <a class="button" href="mailto:rendrstudio.my@gmail.com">
+            Send an email ↗
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+
+  <footer>
+
+    <div class="container footer-row">
+
+      <div>
+        © 2026 RENDRSTUDIO 202403280294 (CA0392860-V).
+        All rights reserved.
+      </div>
+
+      <div class="socials">
+
+        <a href="https://www.instagram.com/rahimi_rendr/" target="_blank">
+          Instagram
+        </a>
+
+        <a href="https://www.tiktok.com/@rahimi_rendr" target="_blank">
+          TikTok
+        </a>
+
+        <a href="https://wa.me/60142677552" target="_blank">
+          Whatsapp
+        </a>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =======================================================
+       PROJECT MODAL
+  ======================================================== -->
+
+  <!-- <div class="modal" id="projectModal">
+
+    <div class="modal-box">
+
+      <button class="modal-close" id="modalClose">
+        ×
+      </button>
+
+      <div class="eyebrow">
+        Project
+      </div>
+
+      <h2 class="modal-title" id="modalTitle">
+      </h2>
+
+
+      <div class="modal-media">
+
+        <video id="modalVideo" controls playsinline preload="metadata">
+          <source id="modalVideoSource" src="" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+
+      </div>
+
+
+      <p class="muted" id="modalDescription">
+      </p>
+
+    </div>
+
+  </div> -->
+
+
+
+  <!-- =======================================================
+       JAVASCRIPT
+  ======================================================== -->
+
+  <script>
+    const projects = document.querySelectorAll(".project");
+
+    const modal = document.getElementById("projectModal");
+    const modalClose = document.getElementById("modalClose");
+
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDescription = document.getElementById("modalDescription");
+
+    const modalVideo = document.getElementById("modalVideo");
+    const modalVideoSource = document.getElementById("modalVideoSource");
+
+
+    projects.forEach(project => {
+
+      project.addEventListener("click", () => {
+
+        const title = project.dataset.title;
+        const description = project.dataset.description;
+        const video = project.dataset.video;
+
+        modalTitle.textContent = title;
+        modalDescription.textContent = description;
+
+        modalVideoSource.src = video;
+
+        modalVideo.load();
+
+        modal.classList.add("active");
+
+      });
+
+    });
+
+
+    modalClose.addEventListener("click", () => {
+
+      modal.classList.remove("active");
+
+      modalVideo.pause();
+      modalVideo.currentTime = 0;
+      modalVideoSource.src = "";
+
+    });
+
+
+    modal.addEventListener("click", (e) => {
+
+      if (e.target === modal) {
+
+        modal.classList.remove("active");
+
+        modalVideo.pause();
+        modalVideo.currentTime = 0;
+        modalVideoSource.src = "";
+
+      }
+
+    });
+  </script>
+
+  <script>
+    const showreel = document.getElementById("showreelVideo");
+
+    showreel.addEventListener("click", () => {
+      if (showreel.paused) {
+        showreel.play();
+        showreel.muted = false;
+      } else {
+        showreel.pause();
+      }
+    });
+  </script>
+
+  <script>
+    const imageCarousel = document.getElementById("imageCarousel");
+    const imagePrev = document.getElementById("imagePrev");
+    const imageNext = document.getElementById("imageNext");
+
+    imageNext.addEventListener("click", () => {
+
+      imageCarousel.scrollBy({
+        left: 480,
+        behavior: "smooth"
+      });
+
+    });
+
+
+    imagePrev.addEventListener("click", () => {
+
+      imageCarousel.scrollBy({
+        left: -480,
+        behavior: "smooth"
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
