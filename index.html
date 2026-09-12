@@ -249,24 +249,18 @@
     .orb {
       position: absolute;
 
-      width: 650px;
-      height: 650px;
+      width: 500px;
+      height: 500px;
 
-      right: -250px;
-      top: 10%;
+      right: -50px;
+      top: 15%;
 
       border-radius: 50%;
-
-      background:
-        radial-gradient(circle at 35% 35%,
-          #eaff59 0%,
-          #67771d 15%,
-          #22270e 40%,
-          transparent 70%);
+      object-fit: cover;
 
       opacity: 0.45;
 
-      filter: blur(2px);
+      /* filter: blur(2px); */
 
       animation: floatingOrb 8s ease-in-out infinite;
     }
@@ -1220,7 +1214,7 @@
 
       <div class="hero-grid"></div>
 
-      <div class="orb"></div>
+      <img class="orb" src="images/sg-02.png" alt="">
 
       <div class="container">
 
@@ -1623,7 +1617,8 @@
 
           <!-- PROJECT 01 -->
           <article class="project" data-title="Product Animation"
-            data-description="A cinematic product animation project." data-video="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-01.mp4">
+            data-description="A cinematic product animation project."
+            data-video="https://pub-57d069e521c54523bf54d5832aa9a9da.r2.dev/project-01.mp4">
 
             <div class="project-image">
               <video autoplay muted loop playsinline preload="metadata">
